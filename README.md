@@ -1,4 +1,4 @@
-# AIQueryApp
+# AI-Query
 
 ## LangChain Flask SerpAPI MongoDB Ollama Integration
 
@@ -6,25 +6,25 @@
 - SerpAPI for web search
 - MongoDB for persistent chat memory
 
-## Setup Instructions
+## Setup
 
 1. **Clone the repo:**
 
-   ```bash
+   ```
    git clone https://github.com/drewesk/AIQueryApp.git
    cd langchain_flask_serpapi_mongo
    ```
 
 2. **Create and activate a virtual environment:**
 
-   ```bash
+   ```
    python3 -m venv venv
    source venv/bin/activate
    ```
 
 3. **Install dependencies:**
 
-   ```bash
+   ```
    pip install -r requirements.txt
    ```
 
@@ -36,13 +36,16 @@
    SERPAPI_API_KEY=your_serpapi_api_key
    MONGODB_URI=your_mongodb_connection_string
    ```
-_____
+
+---
 
 SerpAPI setup
 
 1. Go to [serpapi.com](https://serpapi.com/), sign up.
 2. Copy your API key.
 3. Add to `.env`
+
+---
 
 MongoDB setup
 
@@ -56,7 +59,7 @@ MongoDB setup
    - **Version**: Latest (e.g. 3.12 or later)
 7. Copy the connection auto-genearated string, then add to your `.env` file
 
-____
+---
 
 5. **Run Ollama model server:**
 
@@ -68,52 +71,31 @@ ____
 
    `ollama pull WhiteRabbitNeo/WhiteRabbitNeo-2.5-Qwen-2.5-Coder-7B`
 
-   or use your <modelname> of choice and then modify `app.py` to reflect the new Model Name.
+   or use the <modelname> of your choice and then modify `app.py` to reflect new new Model Name in GET request.
 
 7. **Run the Flask app:**
 
-    ```bash
-    python app.py
-    ```
+   ```bash
+   python app.py
+   ```
 
 8. **Send POST requests to the Flask app `/chat` endpoint with JSON body:**
---------
-💡 To activate real-time web search (instead of using the local LLM), **prefix your prompt with the word `search`**.
-
-This bypasses the local language model and uses your SerpAPI key to fetch live results directly from Google Search.
---------
-    ```json
-    {
-      "prompt": "Your question here"
-    }
-    ```
-
-    Example using `curl`:
-
-    ```bash
-    curl -X POST http://127.0.0.1:5000/chat -H "Content-Type: application/json" -d '{"prompt":"Search, what weather in NYC?"}'
-    ```
-
-
-
 
 ---
 
-#### ✅ Example Using `search` Keyword:
+> To activate real-time web search (instead of using the local LLM), **prefix your prompt with the word `search`**.
+
+This bypasses the local language model and uses your SerpAPI key to fetch live results directly from Google Search.
+
+#### Example Using `search` Keyword:
 
 ```bash
 curl -X POST http://127.0.0.1:5000/chat \
   -H "Content-Type: application/json" \
   -d '{"prompt":"search the weather in NYC"}'
-  ```
+```
 
----
-
-## Notes
-
-- The app sends the prompt to the Ollama server API (`http://localhost:11434/api/generate`) to get AI responses.
-- MongoDB stores the conversation history for persistent memory.
-- SerpAPI is used internally for live search queries.
+Or to prompt the AI without using SerpAI, omit using `Search` as the first word of the prompt.
 
 ---
 
