@@ -90,7 +90,7 @@ ____
     curl -X POST http://127.0.0.1:5000/chat -H "Content-Type: application/json" -d '{"prompt":"What is the weather in NYC?"}'
     ```
 
-> 💡 To activate real-time web search (instead of using the local LLM), **prefix your prompt with the word `search`**.
+##💡 To activate real-time web search (instead of using the local LLM), **prefix your prompt with the word `search`**.
 
 This bypasses the local language model and uses your SerpAPI key to fetch live results directly from Google Search.
 
