@@ -47,13 +47,13 @@ This is a simple Flask app that connects to:
 
 6. **Run your model:**
 
-   ```bash
-   ollama run WhiteRabbitNeo/WhiteRabbitNeo-2.5-Qwen-2.5-Coder-7B
+   `ollama run WhiteRabbitNeo/WhiteRabbitNeo-2.5-Qwen-2.5-Coder-7B`
 
    or
 
-   `ollama pull <modelname>` and then update app.py to reflect this new model.
-   ```
+   `ollama pull <modelname>`
+
+   and then update app.py to reflect this new model.
 
    (If you don’t have the model locally, Ollama will download it automatically.)
 
