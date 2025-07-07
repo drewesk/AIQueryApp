@@ -39,6 +39,24 @@ This is a simple Flask app that connects to:
    MONGODB_URI=your_mongodb_connection_string
    ```
 
+SerpAPI setup
+
+1. Go to [serpapi.com](https://serpapi.com/), sign up.
+2. Copy your API key.
+3. Add to `.env`
+
+MongoDB setup
+
+1. Go to [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas) and sign up.
+2. Create a **free shared cluster**.
+3. In **Database Access**, create a user with a username and password.
+4. In **Network Access**, add IP `0.0.0.0/0` to allow all connections.
+5. Click **Connect** → **Connect your application**.
+6. Choose:
+   - **Driver**: Python
+   - **Version**: Latest (e.g. 3.12 or later)
+7. Copy the connection auto-genearated string, then add to your `.env` file
+
 5. **Run Ollama model server:**
 
    ```bash
@@ -53,29 +71,27 @@ This is a simple Flask app that connects to:
 
    `ollama pull <modelname>`
 
-   and then update app.py to reflect this new model.
-
-   (If you don’t have the model locally, Ollama will download it automatically.)
+   and then modify `app.py` to reflect this new model.
 
 7. **Run the Flask app:**
 
-   ```bash
-   python app.py
-   ```
+    ```bash
+    python app.py
+    ```
 
 8. **Send POST requests to the Flask app `/chat` endpoint with JSON body:**
 
-   ```json
-   {
-     "prompt": "Your question here"
-   }
-   ```
+    ```json
+    {
+      "prompt": "Your question here"
+    }
+    ```
 
-   Example using `curl`:
+    Example using `curl`:
 
-   ```bash
-   curl -X POST http://127.0.0.1:5000/chat -H "Content-Type: application/json" -d '{"prompt":"What is the weather in NYC?"}'
-   ```
+    ```bash
+    curl -X POST http://127.0.0.1:5000/chat -H "Content-Type: application/json" -d '{"prompt":"What is the weather in NYC?"}'
+    ```
 
 ---
 
@@ -89,7 +105,7 @@ This is a simple Flask app that connects to:
 
 # MIT License | Open Source USE!
 
-Copyright (c) [year] [fullname]
+Copyright (c) 2025 Andrew Eskenazi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy  
 of this software and associated documentation files (the "Software"), to deal  
