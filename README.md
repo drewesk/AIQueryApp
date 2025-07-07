@@ -2,8 +2,6 @@
 
 ## LangChain Flask SerpAPI MongoDB Ollama Integration
 
-This is a simple Flask app that connects to:
-
 - An Ollama AI model server
 - SerpAPI for web search
 - MongoDB for persistent chat memory
