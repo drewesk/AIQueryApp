@@ -1,4 +1,4 @@
-# AI Query App
+# AIQueryApp
 
 ## LangChain Flask SerpAPI MongoDB Ollama Integration
 
@@ -38,6 +38,7 @@ This is a simple Flask app that connects to:
    SERPAPI_API_KEY=your_serpapi_api_key
    MONGODB_URI=your_mongodb_connection_string
    ```
+_____
 
 SerpAPI setup
 
@@ -56,6 +57,8 @@ MongoDB setup
    - **Driver**: Python
    - **Version**: Latest (e.g. 3.12 or later)
 7. Copy the connection auto-genearated string, then add to your `.env` file
+
+____
 
 5. **Run Ollama model server:**
 
