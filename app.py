@@ -105,6 +105,14 @@ def chat():
         if response.status_code == 200:
             result = response.json()
             answer = result.get("response", "").strip()
+
+            # ✅ Only save if memory is initialized
+            if memory:
+                try:
+                    memory.save_context({"input": prompt}, {"output": answer})
+                except Exception as e:
+                    print("⚠️ Failed to save context to MongoDB:", str(e))
+
             return jsonify({"response": answer})
         else:
             return jsonify({"error": "Failed to generate response", "details": response.text}), 500
