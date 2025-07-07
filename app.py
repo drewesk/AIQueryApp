@@ -3,18 +3,17 @@ import requests
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 
-from langchain_community.utilities import SerpAPIWrapper
-from langchain.agents import Tool, initialize_agent
-from langchain.agents.agent_types import AgentType
 from langchain.memory import ConversationBufferMemory
 from langchain_mongodb import MongoDBChatMessageHistory
 from pymongo.errors import ConnectionFailure
+
+from serpapi import GoogleSearch  # Official SerpAPI SDK
 
 load_dotenv()
 
 app = Flask(__name__)
 
-memory = None  # Default to None in case MongoDB fails
+memory = None
 chat_history = None
 
 # === MongoDB Memory Setup ===
@@ -29,22 +28,54 @@ try:
         chat_memory=chat_history
     )
     print("✅ MongoDB connection established.")
-except ConnectionFailure as e:
-    print("❌ Failed to connect to MongoDB:", str(e))
+except ConnectionFailure:
+    # Just ignore ConnectionFailure silently (like SSL handshake errors)
+    pass
 except Exception as e:
+    # For other exceptions, still print (optional)
     print("❌ MongoDB setup error:", str(e))
 
-# === Search Tool (SerpAPI) ===
-search = SerpAPIWrapper()
-tools = [
-    Tool(
-        name="Search",
-        func=search.run,
-        description="Useful for current events and online questions.",
-    )
-]
+# === SerpAPI Search Function ===
+def search_with_serpapi(query: str) -> str:
+    print(f"🔍 Running SerpAPI search for: {query}")
 
-# === POST /chat — sends prompt to Ollama (localhost:11434) ===
+    api_key = os.getenv("SERPAPI_API_KEY")
+    if not api_key:
+        return "❌ SerpAPI API key not configured."
+
+    params = {
+        "engine": "google",
+        "q": query,
+        "api_key": api_key,
+    }
+    search = GoogleSearch(params)
+    results = search.get_dict()
+
+    # Debug: print full raw JSON from SerpAPI to console
+    print("🔎 Full SerpAPI results JSON:")
+    import json
+    print(json.dumps(results, indent=2))
+
+    answer = ""
+    source_url = ""
+
+    if "answer_box" in results:
+        answer = results["answer_box"].get("answer") or results["answer_box"].get("snippet", "")
+        source_url = results["answer_box"].get("link", "")
+    elif "organic_results" in results and len(results["organic_results"]) > 0:
+        answer = results["organic_results"][0].get("snippet", "")
+        source_url = results["organic_results"][0].get("link", "")
+    else:
+        answer = "No good search results found."
+
+    # Append the source URL to the answer for reference
+    if source_url:
+        answer += f"\n\n(Source: {source_url})"
+
+    print(f"✅ SerpAPI returned: {answer}")
+    return answer
+
+# === Flask route ===
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
@@ -55,7 +86,13 @@ def chat():
         if not prompt:
             return jsonify({"error": "No prompt provided"}), 400
 
-        # Send prompt to Ollama
+        # If prompt starts with 'search', use SerpAPI
+        if prompt.lower().startswith("search"):
+            query = prompt[len("search"):].strip(" :")
+            result = search_with_serpapi(query)
+            return jsonify({"response": result})
+
+        # Otherwise, send to Ollama
         response = requests.post(
             "http://localhost:11434/api/generate",
             json={
@@ -77,4 +114,4 @@ def chat():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
