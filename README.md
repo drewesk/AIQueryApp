@@ -66,15 +66,11 @@ ____
    ollama serve
    ```
 
-6. **Run your model:**
+6. **Pull model:**
 
-   `ollama run WhiteRabbitNeo/WhiteRabbitNeo-2.5-Qwen-2.5-Coder-7B`
+   `ollama pull WhiteRabbitNeo/WhiteRabbitNeo-2.5-Qwen-2.5-Coder-7B`
 
-   or
-
-   `ollama pull <modelname>`
-
-   and then modify `app.py` to reflect this new model.
+   or use your <modelname> of choice and then modify `app.py` to reflect the new Model Name.
 
 7. **Run the Flask app:**
 
